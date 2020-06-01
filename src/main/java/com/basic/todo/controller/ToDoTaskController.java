@@ -1,6 +1,7 @@
 package com.basic.todo.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
@@ -18,59 +19,56 @@ import com.basic.todo.model.ToDoTask;
 import com.basic.todo.service.ToDoTaskService;
 
 @RestController
-@RequestMapping("/t")
-public class ToDoTaskController {
-	
-	@Autowired
-	private ToDoTaskService todoTaskService;
+@RequestMapping("/tasks")
+public class ToDoTaskController extends AbstractController<ToDoTask, ToDoTaskService> {
 
-	@GetMapping(value="/getalltasks")
-	public List<ToDoTask> getAllToDoTasks() {
-		return todoTaskService.getAllTasks();
+	public ToDoTaskController(ToDoTaskService service) {
+		super(service);
 	}
-	
-	@GetMapping("/gettask/{summary}")
+
+	@GetMapping(value = "/")
+	public List<ToDoTask> get() {
+		return service.get();
+	}
+
+	@GetMapping("/{summary}")
 	public ToDoTask getTaskBySummary(@PathVariable String summary) {
-		return todoTaskService.getTaskBySummary(summary);
+		return service.getTaskBySummary(summary);
 	}
-	
-	@PreAuthorize("hasRole('USER')")
-	@PostMapping(value="/savetask")
-	public ToDoTask saveToDoTask(@RequestBody ToDoTask todoTask) {
-		 return todoTaskService.saveToDoTask(todoTask);
+
+	@PostMapping(value = "/")
+	public Optional<ToDoTask> save(@RequestBody ToDoTask todoTask) {
+		return service.save(todoTask);
 	}
-	
-	@PutMapping(value="/updatetaskstatus/{summary}")
-	public ToDoTask updateToDoTask(@PathVariable String summary) {
-		 List<ToDoTask> taskList = todoTaskService.getAllTasks();
-		 ToDoTask todoTask = null;
-		 
-		 for (ToDoTask task : taskList) {
-			 if (task.getSummary().equalsIgnoreCase(summary)) {
-				 todoTask = task;
-				 break;
-			 }
-		 }
-		 
-		 todoTask.setStatus(Boolean.valueOf(true));
-		 return todoTaskService.saveToDoTask(todoTask);
+
+	@PutMapping(value = "/{summary}")
+	public Optional<ToDoTask> updateToDoTask(@PathVariable String summary) {
+		List<ToDoTask> taskList = service.get();
+		ToDoTask todoTask = null;
+
+		for (ToDoTask task : taskList) {
+			if (task.getSummary().equalsIgnoreCase(summary)) {
+				todoTask = task;
+				break;
+			}
+		}
+
+		todoTask.setStatus(Boolean.valueOf(true));
+		return service.save(todoTask);
 	}
-	
-    @DeleteMapping(value="/removeAllTasks")
-    public void removeAllUser() {
-    	todoTaskService.deleteAllTasks();
-    }
-    
-    @DeleteMapping("/deletetask/{summary}")
+
+	@DeleteMapping(value = "/")
+	public void delete() {
+		service.delete();
+	}
+
+	@DeleteMapping("/{summary}")
 	public void deleteTaskBySummary(@PathVariable String summary) {
-    	todoTaskService.deleteBySummary(summary);
+		service.deleteBySummary(summary);
 	}
-    
-    @GetMapping("/")
-    @PostMapping("/")
-    @DeleteMapping("/")
-    public String gettweet() {
-    	return "Tweet";
-    }
-    
+
+	@GetMapping("/tweet")
+	public String gettweet() {
+		return "Tweet";
+	}
 }

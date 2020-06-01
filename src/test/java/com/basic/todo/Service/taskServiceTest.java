@@ -8,6 +8,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
+import java.util.Optional;
+
 import com.basic.todo.model.ToDoTask;
 import com.basic.todo.service.ToDoTaskService;
 
@@ -16,33 +18,30 @@ public class taskServiceTest {
 
 	@Autowired
 	private ToDoTaskService todotaskService;
-	
+
 	@Test
 	public void saveTaskTest() {
-		ToDoTask task = todotaskService.saveToDoTask(new ToDoTask("read", "Read SRE Book", false));
+		Optional<ToDoTask> task = todotaskService.save(new ToDoTask("read", "Read SRE Book", false));
 
 		assertNotNull(task);
-		assertEquals(task.getSummary(), "read");
-		
+		assertEquals(task.get().getSummary(), "read");
+
 	}
-	
+
 	@Test
 	public void GetBySummaryTaskTest() {
-		ToDoTask task1 = todotaskService.saveToDoTask(new ToDoTask("code", "Code ToDo App", false));
-		
+		Optional<ToDoTask> task1 = todotaskService.save(new ToDoTask("code", "Code ToDo App", false));
+
 		assertNotNull(task1);
 		assertNotNull(todotaskService.getTaskBySummary("code"));
 	}
-	
+
 	@Test
 	public void testUpdateTaskStatus() {
-		ToDoTask task1 = todotaskService.saveToDoTask(new ToDoTask("read", "Read SRE Book", false));
+		Optional<ToDoTask> task1 = todotaskService.save(new ToDoTask("read", "Read SRE Book", false));
 
-		task1.setStatus(Boolean.valueOf(true));
+		task1.get().setStatus(Boolean.valueOf(true));
 
-		assertEquals(task1.getStatus(), true);
+		assertEquals(task1.get().getStatus(), true);
 	}
-	
 }
-
-

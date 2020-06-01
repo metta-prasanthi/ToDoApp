@@ -16,6 +16,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+
 @SpringBootTest
 @AutoConfigureMockMvc
 public class taskControllerTest {
@@ -28,10 +29,13 @@ public class taskControllerTest {
     @Test
     public void getAlltasksTest() {
         try {
-            mockMvc.perform(get("/getalltasks")).andDo(print()).andExpect(status().isOk()).andExpect(jsonPath("$").isArray())
-                    .andExpect(jsonPath("$").isEmpty());
+            mockMvc.perform(get("/tasks/"))
+            	.andDo(print())
+            	.andExpect(status().isOk())
+            	.andExpect(jsonPath("$").isArray())
+                .andExpect(jsonPath("$").isEmpty());
 
-            mockMvc.perform(get("/getalltasks").content(mapper.writeValueAsString(new ToDoTask()))
+            mockMvc.perform(get("/tasks/").content(mapper.writeValueAsString(new ToDoTask()))
                     .contentType(MediaType.APPLICATION_JSON)).andDo(print()).andExpect(status().isOk())
                     .andExpect(jsonPath("$").isEmpty());
 
