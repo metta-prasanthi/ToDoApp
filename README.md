@@ -7,10 +7,14 @@ Password : password1
 ## Datasource : H2 (h2-console)
 
 ## Url's to access the basic functinality
-/gettask/{summary} - get the todo task by summary
-/getalltasks - get all todo tasks
-/savetask - save the todo task
-/updatetaskstatus/{summary} - update the todo task status to true (completed)
-/removeAllTasks - delete all tasks
-/deletetask/{summary} - delete task by summary
+/tasks/{summary} - get the todo task by summary
+/tasks/ - get all todo tasks
+/tasks/ - save the todo task
+/tasks/{summary} - update the todo task status to true (completed)
+/tasks/ - delete all tasks
+/tasks/{summary} - delete task by summary
+
+## Abstract Controller for CRUD 
+
+## yml file to build and run using concourse pipeline
 
