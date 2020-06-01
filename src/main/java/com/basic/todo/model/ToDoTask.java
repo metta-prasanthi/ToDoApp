@@ -1,26 +1,18 @@
 package com.basic.todo.model;
 
-import java.io.Serializable;
-
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
 
 @Entity
-public class ToDoTask implements Serializable{
+public class ToDoTask extends AbstractEntity {
 
 	private static final long serialVersionUID = 1L;
-	
-	 @Id
-     @GeneratedValue(strategy = GenerationType.AUTO)
-	 private Long id;
-	 @NotBlank
-	 private String summary;
-	 private String descr;
-	 private Boolean status;
-	 
+
+	@NotBlank
+	private String summary;
+	private String descr;
+	private Boolean status;
+
 	public ToDoTask() {
 	}
 

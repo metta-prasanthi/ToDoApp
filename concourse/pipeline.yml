@@ -1,0 +1,31 @@
+resources:
+  - name: repo
+    type: git
+    source:
+        uri: https://github.com/metta-prasanthi/ToDoApp.git
+        branches: master
+    check_every: 1m
+  
+  - name: todo-service-image
+    type: docker-image
+    source:
+      repository: 192.168.16.1:5005/todo-services
+      insecure_registries: ["192.168.16.1:5005"]
+      tag: todo-services
+      username: admin
+      password: admin
+
+jobs:
+  - name: todo-service
+    serial: true
+    public: true
+    plan:
+      - get: repo
+        trigger: true
+      - task: deploy-image
+        file: repo/concourse/deploy-image.yml
+      - put: todo-service-image
+        params:
+          file: target/todo-0.0.1-SNAPSHOT.jar
+          name: todo-0.0.1-SNAPSHOT.jar
+          build: repo

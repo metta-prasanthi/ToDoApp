@@ -1,0 +1,19 @@
+---
+platform: linux
+    
+image_resource:
+    type: docker-image
+    source:
+        repository: java
+        tag: latest
+    
+inputs:
+    - name: repo
+    
+outputs:
+    - name: target
+    
+run:
+    dir: repo
+    path: /bin/sh
+    args: ["concourse/deploy-image.sh"]
